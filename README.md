@@ -23,7 +23,7 @@ Puedes acceder directamente a la aplicación en:
 4. **Presiona** el botón **Convertir** y, al finalizar, **descarga** tu MP3 (o el ZIP).
 
 ## Basado en
-La funcionalidad para extraer audio proviene de [alinuxpengui/goodnotes-extractor](https://github.com/alinuxpengui/goodnotes-extractor) (licencia GNU). ¡Gracias por compartir este gran recurso! 🙌
+La funcionalidad para extraer audio proviene de [alinuxpengui/goodnotes-extractor](https://github.com/alinuxpengui/goodnotes-extractor) (licencia GPL 3.0). ¡Gracias por compartir este gran recurso! 🙌
 
 ## Contribuciones
 ¡Son bienvenidas! Si deseas mejorar o corregir algo, envía un Pull Request o abre un Issue.
