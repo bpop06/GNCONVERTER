@@ -29,5 +29,5 @@ La funcionalidad para extraer audio proviene de [alinuxpengui/goodnotes-extracto
 ¡Son bienvenidas! Si deseas mejorar o corregir algo, envía un Pull Request o abre un Issue.
 
 ## Licencia
-Proyecto con licencia [MIT](LICENSE).  
+Proyecto con licencia [GPL 3.0](LICENSE).  
 ¡Disfruta esta herramienta y siéntete libre de adaptarla a tus necesidades! ♻️
