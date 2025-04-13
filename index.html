@@ -7,6 +7,29 @@
   <!-- Carga de JSZip -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
   <style>
+    /* Definición de Variables CSS para modo claro */
+    :root {
+      --primary-color: #007BFF;
+      --secondary-color: #28a745;
+      --accent-color: #e74c3c;
+      --bg-color: #f7f7f7;
+      --text-color: #333;
+      --border-color: #ddd;
+      --drop-border: #007BFF;
+      --container-bg: linear-gradient(135deg, #ece9e6, #ffffff);
+    }
+    /* Variables para modo oscuro */
+    body.dark {
+      --primary-color: #66B2FF;
+      --secondary-color: #2ecc71;
+      --accent-color: #ff6b6b;
+      --bg-color: #333;
+      --text-color: #eee;
+      --border-color: #555;
+      --drop-border: #66B2FF;
+      --container-bg: #222;
+    }
+
     /* Animaciones definidas con keyframes */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -31,27 +54,47 @@
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #ece9e6, #ffffff);
+      background: var(--container-bg);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #333;
+      color: var(--text-color);
       overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
     }
     .container {
       max-width: 800px;
       margin: 30px auto;
       padding: 20px;
+      background: var(--bg-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       animation: fadeIn 0.8s ease-out;
     }
     header {
-      text-align: center;
-      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
       animation: slideIn 0.6s ease-out;
     }
     header h1 {
-      font-size: 2.8em;
+      font-size: 2.4em;
       margin: 0;
-      color: #007BFF;
+      color: var(--primary-color);
       animation: bounceIn 0.8s ease;
+    }
+    /* Botón de modo oscuro/claro */
+    .mode-toggle {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .mode-toggle:hover {
+      background: var(--primary-color);
+      transform: scale(1.05);
     }
     .instructions {
       text-align: center;
@@ -59,7 +102,7 @@
       font-size: 1.1em;
     }
     .upload-section {
-      background: #fff;
+      background: var(--bg-color);
       border-radius: 8px;
       padding: 30px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -67,10 +110,9 @@
       margin-bottom: 20px;
       animation: fadeIn 1s ease-out;
     }
-
     /* Área Drag & Drop */
     .drop-area {
-      border: 2px dashed #007BFF;
+      border: 2px dashed var(--drop-border);
       border-radius: 8px;
       padding: 30px;
       margin-bottom: 20px;
@@ -79,40 +121,42 @@
       cursor: pointer;
     }
     .drop-area.hover {
-      background-color: #e0f0ff;
+      background-color: rgba(0, 123, 255, 0.1);
     }
-    /* Archivo input oculto */
     input[type="file"] {
       display: none;
     }
-    /* Lista de archivos subidos */
+    /* Lista de archivos en dos columnas */
     .file-list {
-      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       padding: 0;
       margin: 0 0 15px 0;
+      list-style: none;
     }
     .file-item {
+      flex: 1 1 calc(50% - 10px);
+      box-sizing: border-box;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      padding: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #f7f7f7;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 10px;
-      margin-bottom: 10px;
       animation: fadeIn 0.5s ease-out;
     }
     .file-item span {
       margin-right: 10px;
-      overflow: hidden; 
+      overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       max-width: 70%;
     }
-
-    /* Botón para retirar (la X) */
+    /* Botón eliminar con ícono X */
     .remove-btn {
-      background: #e74c3c;
+      background: var(--accent-color);
       color: white;
       border: none;
       border-radius: 50%;
@@ -134,7 +178,7 @@
       display: inline-block;
       padding: 12px 25px;
       cursor: pointer;
-      background: #28a745;
+      background: var(--secondary-color);
       color: white;
       border: none;
       border-radius: 5px;
@@ -150,16 +194,15 @@
       background: #218838;
       transform: scale(1.05);
     }
-
     /* Estado y barra de progreso */
     #status {
-      background: #fff;
+      background: var(--bg-color);
       border-radius: 5px;
       padding: 15px;
       margin-bottom: 20px;
       text-align: center;
       font-size: 1.1em;
-      color: #555;
+      color: var(--text-color);
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       animation: fadeIn 0.8s ease-out;
       min-height: 2.5em;
@@ -173,16 +216,17 @@
       margin: 15px auto;
       overflow: hidden;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+      transition: background 0.3s;
     }
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(to right, #4e9cff, #0163fa);
+      background: linear-gradient(to right, var(--primary-color), #0163fa);
       border-radius: 20px 0 0 20px;
       transition: width 0.4s ease;
     }
     #results {
-      background: #fff;
+      background: var(--bg-color);
       border-radius: 5px;
       padding: 20px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -193,7 +237,7 @@
       display: inline-block;
       margin: 10px;
       padding: 10px 20px;
-      background: #28a745;
+      background: var(--secondary-color);
       color: white;
       text-decoration: none;
       border-radius: 5px;
@@ -205,16 +249,16 @@
       transform: scale(1.05);
     }
     .error {
-      color: #e74c3c;
+      color: var(--accent-color);
       font-weight: bold;
       margin-top: 10px;
     }
-    /* Spinner para mostrar durante la generación del ZIP */
+    /* Spinner para generar el ZIP */
     .spinner {
       margin: 0 auto;
       margin-top: 10px;
-      border: 6px solid #f3f3f3; 
-      border-top: 6px solid #007BFF; 
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid var(--primary-color);
       border-radius: 50%;
       width: 36px;
       height: 36px;
@@ -226,28 +270,29 @@
   <div class="container">
     <header>
       <h1>🎵 Goodnotes Audio Converter</h1>
+      <!-- Botón para cambiar entre modo claro y oscuro -->
+      <button class="mode-toggle" onclick="toggleDarkMode()">Modo Oscuro</button>
     </header>
     
     <div class="instructions">
-      <p>Arrastra y suelta tus archivos GoodNotes, o haz clic para seleccionarlos. Luego revisa la lista, retira los que no quieras y finalmente presiona "Convertir". ¡Observa el progreso en tiempo real! 🚀</p>
+      <p>Arrastra y suelta tus archivos GoodNotes, o haz clic para seleccionarlos. Revisa la lista, elimina (✕) los que no necesites y presiona "Convertir". ¡Observa el progreso en tiempo real!</p>
     </div>
     
     <div class="upload-section">
-      <!-- Área de Drop & Click -->
       <div class="drop-area" id="dropArea">
         <p>Arrastra tus archivos GoodNotes aquí</p>
         <p>O haz clic para seleccionarlos</p>
         <input type="file" id="goodnotesFile" accept=".goodnotes" multiple />
       </div>
-      <!-- Lista de archivos subidos -->
+      <!-- Lista de archivos en dos columnas -->
       <ul class="file-list" id="fileList"></ul>
-      <!-- Botón para iniciar conversión -->
+      <!-- Botón de Conversión -->
       <button class="convert-btn" id="convertBtn" disabled>Convertir</button>
     </div>
     
     <div id="status">Esperando archivos... ⏳</div>
     
-    <!-- Contenedor de la barra de progreso -->
+    <!-- Barra de progreso reutilizable -->
     <div class="progress-container" id="progressContainer" style="display: none;">
       <div class="progress-bar" id="progressFill"></div>
     </div>
@@ -256,7 +301,7 @@
   </div>
 
   <script>
-    // Variables para almacenar los archivos seleccionados
+    // Variables globales
     const selectedFiles = [];
     const fileListEl = document.getElementById('fileList');
     const dropArea = document.getElementById('dropArea');
@@ -267,10 +312,9 @@
     const progressFill = document.getElementById('progressFill');
     const resultsDiv = document.getElementById('results');
 
-    // Funciones para actualizar el estado y la barra de progreso
+    // Funciones para actualizar estado y barra de progreso
     function updateStatus(message) {
       statusDiv.innerHTML = message;
-      // Reiniciar animación (fadeIn)
       statusDiv.style.animation = 'none';
       statusDiv.offsetHeight;
       statusDiv.style.animation = null;
@@ -279,14 +323,13 @@
       progressFill.style.width = percent + '%';
     }
 
-    // Renderiza la lista de archivos con opción de retirar (X)
+    // Renderizar la lista de archivos en dos columnas con botón X
     function renderFileList() {
       fileListEl.innerHTML = '';
       selectedFiles.forEach((file, index) => {
         const li = document.createElement('li');
         li.classList.add('file-item');
         li.innerHTML = `<span>${file.name}</span>`;
-
         const removeBtn = document.createElement('button');
         removeBtn.textContent = '✕';
         removeBtn.classList.add('remove-btn');
@@ -300,12 +343,11 @@
       });
       updateConvertButtonState();
     }
-
     function updateConvertButtonState() {
-      convertBtn.disabled = (selectedFiles.length === 0);
+      convertBtn.disabled = selectedFiles.length === 0;
     }
 
-    // Manejadores de Drag & Drop
+    // Manejo de Drag & Drop y click
     dropArea.addEventListener('dragover', (e) => {
       e.preventDefault();
       dropArea.classList.add('hover');
@@ -326,7 +368,6 @@
       const files = e.target.files;
       handleFiles(files);
     });
-    
     function handleFiles(files) {
       for (const file of files) {
         if (file.name.toLowerCase().endsWith('.goodnotes')) {
@@ -336,8 +377,10 @@
       renderFileList();
     }
 
-    // Acción al pulsar "Convertir"
+    // Acción al presionar "Convertir"
     convertBtn.addEventListener('click', async () => {
+      // Bloquear la eliminación al ocultar los botones de remover
+      document.querySelectorAll('.remove-btn').forEach(btn => btn.style.display = 'none');
       updateStatus('Procesando archivos... 🔍');
       progressContainer.style.display = 'block';
       updateProgressBar(0);
@@ -346,6 +389,7 @@
       const convertedFiles = [];
       const failedFiles = [];
 
+      // Procesamos cada archivo seleccionado
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         updateStatus(`Procesando archivo ${i+1} de ${selectedFiles.length}: <strong>${file.name}</strong> 📂`);
@@ -356,7 +400,7 @@
         const baseName = originalName.substring(0, originalName.lastIndexOf('.'));
 
         try {
-          // Descompresión con JSZip + onProgress
+          // Descompresión con JSZip y onProgress
           const zipContent = await JSZip.loadAsync(file, {
             onProgress: (metadata) => {
               const percent = metadata.percent.toFixed(2);
@@ -373,7 +417,6 @@
               attachments.push(zipEntry);
             }
           });
-
           if (attachments.length === 0) {
             failedFiles.push(originalName);
             continue;
@@ -401,9 +444,8 @@
           console.error(`Error procesando ${originalName}:`, error);
           failedFiles.push(originalName);
         }
-      }
+      } // Fin de procesamiento de archivos
 
-      // Ocultamos la barra de progreso y mostramos el estado final
       progressContainer.style.display = 'none';
       updateStatus('Procesamiento completado 🏁');
 
@@ -418,7 +460,6 @@
       
       // Si hay más de un archivo convertido, generamos el ZIP
       if (convertedFiles.length > 1) {
-        // Mostramos spinner y barra mientras generamos ZIP
         updateStatus(`
           <div style="text-align:center;">
             <p>Generando ZIP...</p>
@@ -432,10 +473,7 @@
         convertedFiles.forEach(fileInfo => {
           outputZip.file(fileInfo.name, fileInfo.blob);
         });
-
-        const zipBlob = await outputZip.generateAsync({ 
-          type: "blob" 
-        }, (metadata) => {
+        const zipBlob = await outputZip.generateAsync({ type: "blob" }, (metadata) => {
           const zipPercent = metadata.percent.toFixed(2);
           updateStatus(`
             <div style="text-align:center;">
@@ -445,15 +483,12 @@
           `);
           updateProgressBar(zipPercent);
         });
-
         updateProgressBar(100);
         progressContainer.style.display = 'none';
-        updateStatus('¡ZIP Listo para descargar!');
-
+        updateStatus('¡ZIP listo para descargar!');
         const zipUrl = URL.createObjectURL(zipBlob);
         message += `<div><a class="download-btn" href="${zipUrl}" download="converted_files.zip">Descargar ZIP: converted_files.zip ⬇️</a></div>`;
       } else {
-        // Solo hay 1 archivo convertido
         const fileInfo = convertedFiles[0];
         const fileUrl = URL.createObjectURL(fileInfo.blob);
         message += `<div><a class="download-btn" href="${fileUrl}" download="${fileInfo.name}">Descargar ${fileInfo.name} ⬇️</a></div>`;
@@ -461,7 +496,7 @@
       resultsDiv.innerHTML = message;
     });
 
-    // Adivina extensión del blob a partir de firmas
+    // Función para adivinar extensión de blob por sus firmas
     async function guessExtension(blob) {
       const signatures = {
         'mp3': [0x49, 0x44, 0x33],
@@ -471,7 +506,6 @@
       };
       const header = await blob.slice(0, 8).arrayBuffer();
       const bytes = new Uint8Array(header);
-      // Caso especial PDF
       if (bytes[4] === 0x25 && bytes[5] === 0x50 && bytes[6] === 0x44) {
         return 'pdf';
       }
@@ -479,6 +513,17 @@
         if (sig.every((byte, i) => bytes[i] === byte)) return ext;
       }
       return 'bin';
+    }
+
+    // Función para alternar entre modo claro y oscuro
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      const toggleBtn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('dark')) {
+        toggleBtn.textContent = 'Modo Claro';
+      } else {
+        toggleBtn.textContent = 'Modo Oscuro';
+      }
     }
   </script>
 </body>
