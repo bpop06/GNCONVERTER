@@ -1,4 +1,3 @@
-Aquí tienes un ejemplo de un archivo README.md para tu repositorio:
 
 ---
 
