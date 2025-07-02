@@ -421,8 +421,7 @@
             failedFiles.push(originalName);
             continue;
           }
-          let candidate = null;
-          let candidateSize = 0;
+          const audioFiles = [];
           for (let zipEntry of attachments) {
             const blob = await zipEntry.async('blob');
             let ext = await guessExtension(blob);
@@ -430,13 +429,14 @@
             if (['m4a', 'mp4', 'bin'].includes(ext)) {
               ext = 'mp3';
             }
-            if (blob.size > candidateSize) {
-              candidate = { blob, extension: ext, name: baseName + '.' + ext };
-              candidateSize = blob.size;
-            }
+            audioFiles.push({ blob, extension: ext });
           }
-          if (candidate) {
-            convertedFiles.push(candidate);
+          if (audioFiles.length > 0) {
+            audioFiles.forEach((fileInfo, idx) => {
+              const suffix = audioFiles.length > 1 ? `_${idx + 1}` : '';
+              fileInfo.name = `${baseName}${suffix}.${fileInfo.extension}`;
+              convertedFiles.push(fileInfo);
+            });
           } else {
             failedFiles.push(originalName);
           }
