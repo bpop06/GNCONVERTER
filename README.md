@@ -5,7 +5,7 @@ Este proyecto permite extraer y convertir a MP3 todos los audios incluidos en ar
 ## Características
 - **Arrastrar y soltar archivos:** Permite seleccionar múltiples archivos GoodNotes a la vez.
 - **Vista previa y gestión de archivos:** Observa la lista de archivos y elimina los que no quieras procesar.
-- **Extracción completa:** Obtén todos los audios presentes en cada archivo GoodNotes.
+- **Extracción completa:** Extrae cada archivo de audio presente en tus GoodNotes, sin omitir ninguno.
 - **Conversión dinámica:** Si subes un solo archivo, se descarga en MP3; si son varios, se genera un ZIP con todos.
 - **Barra de progreso animada:** Visualiza el avance de la conversión de manera dinámica.
 
